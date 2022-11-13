@@ -25,15 +25,17 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "esbenp.prettier-vscode",
-        "rvest.vs-code-prettier-eslint",
-        "dbaeumer.vscode-eslint",
-        "eamodio.gitlens",
-        "wix.vscode-import-cost",
-        "ms-playwright.playwright",
-        "WallabyJs.wallaby-vscode",
-        "WallabyJs.quokka-vscode"
-      ]
+		"esbenp.prettier-vscode",
+		"rvest.vs-code-prettier-eslint",
+		"dbaeumer.vscode-eslint",
+		"eamodio.gitlens",
+		"wix.vscode-import-cost",
+		"ms-playwright.playwright",
+		"WallabyJs.wallaby-vscode",
+		"WallabyJs.quokka-vscode",
+		"mtxr.sqltools",
+		"mtxr.sqltools-driver-pg"
+	]
     }
   },
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
