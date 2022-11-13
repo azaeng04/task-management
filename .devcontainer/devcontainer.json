@@ -1,6 +1,27 @@
 {
-  "name": "Ubuntu",
+  "name": "Ubuntu with Docker",
   "image": "azaeng04/dev",
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:1": {
+      "installZsh": "true",
+      "upgradePackages": "false",
+      "uid": "1000",
+      "gid": "1000",
+      "installOhMyZsh": "true",
+      "nonFreePackages": "true"
+    },
+    "ghcr.io/devcontainers/features/docker-from-docker:1": {
+      "version": "latest",
+      "enableNonRootDocker": "true",
+      "moby": "true"
+    }
+  },
+
+  // Use this environment variable if you need to bind mount your local source code into a new container.
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+
   "customizations": {
     "vscode": {
       "extensions": [
@@ -15,10 +36,6 @@
       ]
     }
   },
-
-  // Features to add to the dev container. More info: https://containers.dev/implementors/features.
-  // "features": {},
-
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],
 
