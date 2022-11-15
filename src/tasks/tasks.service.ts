@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { User } from 'src/auth/user.entity';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-task-filter.dto';
 import { UpdateTaskStatusDto } from './dto/update-task-status.dto';
@@ -8,20 +9,24 @@ import { TasksRepository } from './tasks.repository';
 export class TasksService {
   constructor(private tasksRepository: TasksRepository) {}
 
-  getTasks(filterDto: GetTasksFilterDto) {
-    return this.tasksRepository.getTasks(filterDto);
+  getTasks(filterDto: GetTasksFilterDto, user: User) {
+    return this.tasksRepository.getTasks(filterDto, user);
   }
 
-  async getTaskById(id: string) {
-    return this.tasksRepository.getTaskById(id);
+  async getTaskById(id: string, user: User) {
+    return this.tasksRepository.getTaskById(id, user);
   }
 
-  async createTask(createTaskDto: CreateTaskDto) {
-    return this.tasksRepository.createTask(createTaskDto);
+  async createTask(createTaskDto: CreateTaskDto, user: User) {
+    return this.tasksRepository.createTask(createTaskDto, user);
   }
 
-  async updateTaskStatusById(id: string, taskStatus: UpdateTaskStatusDto) {
-    return this.updateTaskStatusById(id, taskStatus);
+  async updateTaskStatusById(
+    id: string,
+    taskStatus: UpdateTaskStatusDto,
+    user: User,
+  ) {
+    return this.tasksRepository.updateTaskStatusById(id, taskStatus, user);
   }
 
   async deleteTaskById(id: string) {

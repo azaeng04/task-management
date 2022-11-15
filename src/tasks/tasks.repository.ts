@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/user.entity';
 import { Repository } from 'typeorm';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-task-filter.dto';
@@ -13,9 +14,10 @@ export class TasksRepository {
     @InjectRepository(Task) private tasksRepository: Repository<Task>,
   ) {}
 
-  async getTasks(filterDto: GetTasksFilterDto) {
+  async getTasks(filterDto: GetTasksFilterDto, user: User) {
     const { status, search } = filterDto;
     const query = this.tasksRepository.createQueryBuilder('task');
+    query.where({ user });
 
     if (status) {
       query.andWhere('task.status = :status', { status });
@@ -23,7 +25,7 @@ export class TasksRepository {
 
     if (search) {
       query.andWhere(
-        'LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search)',
+        '(LOWER(task.title) LIKE LOWER(:search) OR LOWER(task.description) LIKE LOWER(:search))',
         { search: `%${search}%` },
       );
     }
@@ -32,30 +34,35 @@ export class TasksRepository {
     return tasks;
   }
 
-  async getTaskById(id: string) {
-    const isTaskFound = await this.tasksRepository.findOneBy({ id });
+  async getTaskById(id: string, user: User) {
+    const isTaskFound = await this.tasksRepository.findOneBy({ id, user });
     if (!isTaskFound) {
       throw new NotFoundException(`The task with ID ${id} was not found`);
     }
     return isTaskFound;
   }
 
-  async createTask(createTaskDto: CreateTaskDto) {
+  async createTask(createTaskDto: CreateTaskDto, user: User) {
     const { title, description } = createTaskDto;
 
     const task = this.tasksRepository.create({
       title,
       description,
       status: TaskStatus.OPEN,
+      user,
     });
 
     await this.tasksRepository.save(task);
     return task;
   }
 
-  async updateTaskStatusById(id: string, taskStatus: UpdateTaskStatusDto) {
+  async updateTaskStatusById(
+    id: string,
+    taskStatus: UpdateTaskStatusDto,
+    user: User,
+  ) {
     const { status } = taskStatus;
-    const task = await this.getTaskById(id);
+    const task = await this.getTaskById(id, user);
     task.status = status;
     this.tasksRepository.save(task);
     return task;
