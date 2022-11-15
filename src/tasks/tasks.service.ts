@@ -29,7 +29,7 @@ export class TasksService {
     return this.tasksRepository.updateTaskStatusById(id, taskStatus, user);
   }
 
-  async deleteTaskById(id: string) {
-    return this.deleteTaskById(id);
+  async deleteTaskById(id: string, user: User) {
+    return this.tasksRepository.deleteTaskById(id, user);
   }
 }
